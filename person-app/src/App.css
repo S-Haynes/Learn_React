@@ -2,3 +2,15 @@
   text-align: center;
 }
 
+.App button {
+  background-color: steelblue;
+  color: white;
+}
+
+.App button:hover {
+  background: blue;
+}
+
+.App button.Red {
+  background: red;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Persons from './Components/Persons/Persons'
-import './App.css';
+import classes from './App.css';
 
 class App extends Component {
 
@@ -55,24 +55,20 @@ class App extends Component {
 
   render() {
       let persons = null;
-      const style = {
-       backgroundColor: 'green',
-       color: 'white',
-      }
-
+      let btnClass = '';
        if(this.state.show) {
         persons = <Persons 
           clicked={this.deletePersonHandler}
           changed={this.nameChangeHandler}
           persons={this.state.persons}/>
-        style.backgroundColor = 'red'
+        btnClass = classes.Red
       }
    
    
     return (
-      <div className="App">
+      <div className={classes.App}>
       <h1>I'm a React App</h1>
-      <button style={style} onClick={this.toggleHandler}>Toggle Persons</button>
+      <button className={btnClass} onClick={this.toggleHandler}>Toggle Persons</button>
       {persons}
       </div>
     );
