@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Burger from '../../components/Burger/Burger';
-import BuildControls from '../../components/Burger/BuildControls/BuildControls'
+import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 class BurgerBuilder extends Component {
   state = {
     ingredients: [
@@ -10,7 +12,8 @@ class BurgerBuilder extends Component {
       {type: 'meat', quantity: 0, price: 1.30}
     ],
 
-    totalPrice: 0
+    totalPrice: 4,
+    purchasing: false
   }
 
   checkQuantityHandler = (type) => {
@@ -34,7 +37,6 @@ class BurgerBuilder extends Component {
     currentIngredient[0].quantity++
     let newPrice = price.totalPrice + currentIngredient[0].price
     this.setState({ingredients: ingredients, totalPrice: newPrice})
-    console.log(newPrice)
     this.checkQuantityHandler(type);
   }
 
@@ -50,29 +52,29 @@ class BurgerBuilder extends Component {
         let newPrice = price.totalPrice - currentIngredient[0].price
         currentIngredient[0].quantity--
         this.setState({ingredients: ingredients, totalPrice: newPrice})
-        console.log(newPrice)
     };  
 
     this.checkQuantityHandler(type)
-
     }
-  
-  
 
+    purchasingHandler = () => {
+      this.setState({purchasing: true})
+    }
 
+    cancelPurchaseHandler = () => {
+      this.setState({purchasing: false})
+    }
 
 	render () {
 
-     let checkIngredients = this.state.ingredients.map(a => {return {...a}})
-
-    for(let i = 0; i < checkIngredients.length; i++){
-      checkIngredients[i].quantity = checkIngredients[i].quantity <= 0
-    }
 
 		return (
 				<div>
+          <Modal show={this.state.purchasing} cancel={this.cancelPurchaseHandler}> 
+            <OrderSummary cancel={this.cancelPurchaseHandler} ingredients={this.state.ingredients} />
+          </Modal>
 					<Burger ingredients={this.state.ingredients} />
-					<BuildControls ingredients={this.state.ingredients} removeIngredient={this.removeIngredientHandler} addIngredient={this.addIngredientHandler}  />
+					<BuildControls purchase={this.purchasingHandler} price={this.state.totalPrice} ingredients={this.state.ingredients} removeIngredient={this.removeIngredientHandler} addIngredient={this.addIngredientHandler}  />
 				</div>	
 			)
 	}

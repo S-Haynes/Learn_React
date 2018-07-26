@@ -6,7 +6,7 @@ const buildControl = (props) => {
     let disable = null;
 
     const ingredientIndex = props.ingredients.findIndex(ingredient => {
-          return ingredient.type === props.type;
+      return ingredient.type === props.type;
     });
 
     if(props.ingredients[ingredientIndex].quantity === 0){

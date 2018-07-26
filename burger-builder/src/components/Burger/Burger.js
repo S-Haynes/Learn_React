@@ -6,7 +6,7 @@ const burger = (props) => {
   let transformedIngredients = props.ingredients
     .map(ingredient => {
       return [...Array(ingredient.quantity)].map((_, index) => {
-          return <BurgerIngredient add={props.addIngredient} key={ingredient.type + index} type={ingredient.type} />
+          return <BurgerIngredient key={ingredient.type + index} type={ingredient.type} />
       }); 
     })
     .reduce((arr, el) => {
