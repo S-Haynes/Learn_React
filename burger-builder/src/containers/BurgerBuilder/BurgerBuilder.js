@@ -65,16 +65,28 @@ class BurgerBuilder extends Component {
       this.setState({purchasing: false})
     }
 
+    continuePurchaseHandler = () => {
+      alert('You continued the purchase')
+    }
+
 	render () {
 
 
 		return (
 				<div>
-          <Modal show={this.state.purchasing} cancel={this.cancelPurchaseHandler}> 
-            <OrderSummary cancel={this.cancelPurchaseHandler} ingredients={this.state.ingredients} />
+          <Modal show={this.state.purchasing} 
+                 cancel={this.cancelPurchaseHandler}> 
+            <OrderSummary price={this.state.totalPrice} 
+                          continue={this.continuePurchaseHandler}
+                          cancel={this.cancelPurchaseHandler} 
+                          ingredients={this.state.ingredients}/>
           </Modal>
 					<Burger ingredients={this.state.ingredients} />
-					<BuildControls purchase={this.purchasingHandler} price={this.state.totalPrice} ingredients={this.state.ingredients} removeIngredient={this.removeIngredientHandler} addIngredient={this.addIngredientHandler}  />
+					<BuildControls purchase={this.purchasingHandler} 
+                         price={this.state.totalPrice} 
+                         ingredients={this.state.ingredients} 
+                         removeIngredient={this.removeIngredientHandler} 
+                         addIngredient={this.addIngredientHandler}  />
 				</div>	
 			)
 	}

@@ -1,0 +1,23 @@
+.OrderSummary {
+
+}
+
+.OrderSummary li {
+  list-style: none;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.OrderSummary ul {
+  padding: 0;
+}
+
+.OrderSummary h2 {
+  text-align: center;
+
+}
+
+.Center {
+  width: 100%;
+  text-align: center;
+}
