@@ -13,6 +13,15 @@
   z-index: 90;
 }
 
-.Toolbar nav {
+.Logo {
   height: 80%;
+}
+.Toolbar nav {
+  height: 100%;
+}
+
+@media (max-width: 499px){
+  .DesktopOnly {
+    display: none;
+  }
 }
