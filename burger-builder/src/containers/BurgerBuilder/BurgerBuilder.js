@@ -5,7 +5,8 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../withErrorHandler/withErrorHandler'
+import withErrorHandler from '../withErrorHandler/withErrorHandler';
+
 
 class BurgerBuilder extends Component {
   state = {
@@ -76,28 +77,18 @@ class BurgerBuilder extends Component {
     }
 
     continuePurchaseHandler = () => {
-      this.setState({loading: true})
-      let ingredientsObj = null
-      setTimeout(() => {
-        const ingredients = [...this.state.ingredients]
-        const mappedIngredients = ingredients.map(ingredient => {
-        return {[ingredient.type]: ingredient.quantity}
-      })
-      
-      ingredientsObj = Object.assign({}, ...mappedIngredients)
-        
-      const order = {
-        price: this.state.totalPrice,
-        ingredients: ingredientsObj,
-        customer: {
-          name: 'Joe',
-          address: 'Test Street 123'
-        }
+    let queryParams = []
+    for(let i = 0; i < this.state.ingredients.length; i++){
+      for(let j in this.state.ingredients[i]){
+        queryParams.push(encodeURIComponent(j) + '=' + encodeURIComponent(this.state.ingredients[i][j]))
       }
-      axios.post('/orders.json', order)
-        .then(res => this.setState({loading: false, purchasing: false}))
-        .catch(err => this.setState({loading: false, purchasing: false}))
-     }, 2000) 
+    }
+      let queryString = queryParams.join('&')
+
+     this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
+     })
      
     }
 
@@ -124,6 +115,7 @@ class BurgerBuilder extends Component {
       orderSummary = <Spinner />
     }
     
+
 		return (
 				<div>
           <Modal show={this.state.purchasing} 
