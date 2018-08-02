@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import Person from './Person/Person';
 
 class Persons extends Component {
@@ -24,58 +25,16 @@ class Persons extends Component {
     newAge: ''
   }
 
-  deletePersonHandler = (id) => {
-    const persons = [...this.state.persons];
-
-    const updatedPersons = persons.filter(person => {
-      return person.id !== id;
-    })
-
-    this.setState({persons: updatedPersons});
-  }
-
-  updatePersonNameHandler = (e) => {
-    let newState = [...this.state]
-    let newName = newState.newName
-
-    newName = e.target.value;
-
-    this.setState({newName: newName})
-    
-  }
-  updatePersonAgeHandler = (e) => {
-      let newState = [...this.state]
-      let newAge = newState.newAge
-
-      newAge = e.target.value;
-      
-      this.setState({newAge: newAge})  
-    }
-
-  submitPersonHandler = (e) => {
-    e.preventDefault();
-    const updatedPersons = [
-      ...this.state.persons,
-      { 
-        id: Math.random(),
-        name: this.state.newName,
-        age: this.state.newAge
-      }
-    ]
-
-    this.setState({persons: updatedPersons, newName: '', newAge: ''})
-  }
-
   render () {
-    const personArr = this.state.persons.map(person => {
-      return <Person key={person.id} clicked={this.deletePersonHandler.bind(this, person.id)} name={person.name} age={person.age} />
+    const personArr = this.props.persons.map(person => {
+      return <Person key={person.id} clicked={this.props.deletePersonHandler.bind(this, person.id)} name={person.name} age={person.age} />
     })
     return (
       <div>
         {personArr}
-        <form onSubmit={(e) => this.submitPersonHandler(e)}>
-          <input type="text" onChange={(e) => this.updatePersonNameHandler(e)} placeholder="name" value={this.state.newName}/>  
-          <input type="text" onChange={(e) => this.updatePersonAgeHandler(e)} placeholder="age" value={this.state.newAge}/>  
+        <form onSubmit={(e) => this.props.submitPersonHandler(e)}>
+          <input type="text" onChange={(e) => this.props.updatePersonNameHandler(e)} placeholder="name" value={this.props.newName}/>  
+          <input type="text" onChange={(e) => this.props.updatePersonAgeHandler(e)} placeholder="age" value={this.props.newAge}/>  
           <button>Submit!</button>
         </form>
       </div>
@@ -83,4 +42,21 @@ class Persons extends Component {
   }
 }
 
-export default Persons;
+const mapStateToProps = state => {
+  return {
+    newName: state.newName,
+    newAge: state.newAge,
+    persons: state.persons
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updatePersonNameHandler: (e) => dispatch({type:'CHANGE_NAME', payload: e}),
+    updatePersonAgeHandler: (e) => dispatch({type:'CHANGE_AGE', payload: e}),
+    submitPersonHandler: (e) => dispatch({type:'ADD_PERSON', payload: e}),
+    deletePersonHandler: (id) => dispatch({type:'DELETE_PERSON', payload: id})
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Persons);
