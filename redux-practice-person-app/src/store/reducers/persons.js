@@ -1,3 +1,5 @@
+import * as actions from '../actions';
+
 const initialState = {
    persons: [
     {
@@ -16,30 +18,19 @@ const initialState = {
       age: '16'
     },
     ],
-    newName: '',
-    newAge: ''
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type){
-    case 'CHANGE_NAME':
-      return {
-        ...state,
-        newName: action.payload.target.value
-      }
-    case 'CHANGE_AGE':
-      return {
-        ...state,
-        newAge: action.payload.target.value
-      }
-    case 'ADD_PERSON':
+    
+    case actions.ADD_PERSON:
        action.payload.preventDefault();
         const updatedPersons = [
           ...state.persons,
         { 
           id: Math.random(),
-          name: state.newName,
-          age: state.newAge
+          name: action.newName,
+          age: action.newAge
         }
       ]
       return {
@@ -48,9 +39,8 @@ const reducer = (state = initialState, action) => {
         newName: '',
         newAge: ''
       }
-    case 'DELETE_PERSON':
-      const persons = [...state.persons]
-      const newPersons = persons.filter(person => {
+    case actions.DELETE_PERSON:
+      const newPersons = state.persons.filter(person => {
         return person.id !== action.payload
       })
     return {

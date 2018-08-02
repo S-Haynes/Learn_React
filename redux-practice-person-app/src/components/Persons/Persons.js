@@ -1,40 +1,29 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import Person from './Person/Person';
+import * as actions from '../../store/actions';
 
 class Persons extends Component {
-  state = {
-    persons: [
-    {
-      id: 32123,
-      name: 'Bob',
-      age: '28'
-    },
-    { 
-      id: 321233223,
-      name: 'Sally',
-      age: '20'
-    },
-    { 
-      id: 32123177,
-      name: 'Joe',
-      age: '16'
-    },
-    ],
-    newName: '',
-    newAge: ''
-  }
-
+ 
   render () {
     const personArr = this.props.persons.map(person => {
-      return <Person key={person.id} clicked={this.props.deletePersonHandler.bind(this, person.id)} name={person.name} age={person.age} />
-    })
+      return <Person key={person.id} 
+                     clicked={this.props.deletePersonHandler.bind(this, person.id)} 
+                     name={person.name} 
+                     age={person.age} />
+    });
     return (
       <div>
         {personArr}
-        <form onSubmit={(e) => this.props.submitPersonHandler(e)}>
-          <input type="text" onChange={(e) => this.props.updatePersonNameHandler(e)} placeholder="name" value={this.props.newName}/>  
-          <input type="text" onChange={(e) => this.props.updatePersonAgeHandler(e)} placeholder="age" value={this.props.newAge}/>  
+        <form onSubmit={(e) => this.props.submitPersonHandler(e, this.props.newName, this.props.newAge)}>
+          <input type="text" 
+                 onChange={(e) => this.props.updatePersonNameHandler(e)} 
+                 placeholder="name" 
+                 value={this.props.newName}/>  
+          <input type="text" 
+                 onChange={(e) => this.props.updatePersonAgeHandler(e)} 
+                 placeholder="age" 
+                 value={this.props.newAge}/>  
           <button>Submit!</button>
         </form>
       </div>
@@ -44,18 +33,18 @@ class Persons extends Component {
 
 const mapStateToProps = state => {
   return {
-    newName: state.newName,
-    newAge: state.newAge,
-    persons: state.persons
+    newName: state.form.newName,
+    newAge: state.form.newAge,
+    persons: state.persons.persons
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    updatePersonNameHandler: (e) => dispatch({type:'CHANGE_NAME', payload: e}),
-    updatePersonAgeHandler: (e) => dispatch({type:'CHANGE_AGE', payload: e}),
-    submitPersonHandler: (e) => dispatch({type:'ADD_PERSON', payload: e}),
-    deletePersonHandler: (id) => dispatch({type:'DELETE_PERSON', payload: id})
+    updatePersonNameHandler: (e, newName) => dispatch({type: actions.CHANGE_NAME, payload: e}),
+    updatePersonAgeHandler: (e, newAge) => dispatch({type: actions.CHANGE_AGE, payload: e}),
+    submitPersonHandler: (e, newName, newAge) => dispatch({type: actions.ADD_PERSON, payload: e, newName: newName, newAge: newAge}),
+    deletePersonHandler: (id) => dispatch({type: actions.DELETE_PERSON, payload: id})
   };
 }
 
