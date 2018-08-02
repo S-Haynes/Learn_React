@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Person from './Person/Person';
-import * as actions from '../../store/actions';
+import * as personActions from '../../store/actions/personActions';
 
 class Persons extends Component {
  
@@ -41,10 +41,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updatePersonNameHandler: (e, newName) => dispatch({type: actions.CHANGE_NAME, payload: e}),
-    updatePersonAgeHandler: (e, newAge) => dispatch({type: actions.CHANGE_AGE, payload: e}),
-    submitPersonHandler: (e, newName, newAge) => dispatch({type: actions.ADD_PERSON, payload: e, newName: newName, newAge: newAge}),
-    deletePersonHandler: (id) => dispatch({type: actions.DELETE_PERSON, payload: id})
+    updatePersonNameHandler: (e) => dispatch(personActions.changeName(e)),
+    updatePersonAgeHandler: (e) => dispatch(personActions.changeAge(e)),
+    submitPersonHandler: (e, newName, newAge) => dispatch(personActions.addPerson(e, newName, newAge)),
+    deletePersonHandler: (id) => dispatch(personActions.deletePerson(id))
   };
 }
 
