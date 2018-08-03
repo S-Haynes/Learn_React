@@ -5,6 +5,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './CheckoutForm.css';
 import axios from '../../../axios-orders';
 import Input from '../../../components/UI/Input/Input';
+import { connect } from 'react-redux';
 
 class CheckoutForm extends Component {
 
@@ -78,7 +79,6 @@ class CheckoutForm extends Component {
           },
     },
     loading: false,
-    totalPrice: 4,
     formIsValid: false
   }
 
@@ -118,7 +118,7 @@ class CheckoutForm extends Component {
       ingredientsObj = Object.assign({}, ...mappedIngredients)
         
       const order = {
-        price: this.state.totalPrice,
+        price: this.props.price,
         ingredients: ingredientsObj,
         orderData: formData
         }
@@ -196,4 +196,11 @@ class CheckoutForm extends Component {
   }
 }
 
-export default withRouter(CheckoutForm);
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients,
+    price: state.totalPrice
+  }
+}
+
+export default connect(mapStateToProps)(withRouter(CheckoutForm));

@@ -1,39 +1,51 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  ingredients: [
-  {type: 'salad', quantity: 0, price: 0.5},
-  {type: 'bacon', quantity: 0, price: 0.6},
-  {type: 'cheese', quantity: 0, price: 0.4},
-  {type: 'meat', quantity: 0, price: 1.3}
-  ],
-  totalPrice: 4
+  ingredients: null,
+  totalPrice: 4,
+  error: false,
+ 
 }
 
 const reducer = (state = initialState, action) => {
-  const index = state.ingredients.findIndex(ingredient => {
-          return ingredient.type === action.ingName
-      })
-
   switch(action.type){
     case actionTypes.ADD_INGREDIENT:
+      const index_add = state.ingredients.findIndex(ingredient => {
+          return ingredient.type === action.ingName
+      })
       return {
         ...state,
         ingredients: [
         ...state.ingredients,
-        ...state.ingredients[index].quantity++  
+        ...state.ingredients[index_add],
+        ...state.ingredients[index_add].quantity++
         ],
-        totalPrice: state.totalPrice + state.ingredients[index].price
+        totalPrice: state.totalPrice + state.ingredients[index_add].price
         }
     case actionTypes.REMOVE_INGREDIENT:
+    const index_remove = state.ingredients.findIndex(ingredient => {
+          return ingredient.type === action.ingName
+      })
       return {
          ...state,
         ingredients: [
         ...state.ingredients,
-        ...state.ingredients[index].quantity--  
+        ...state.ingredients[index_remove],
+        ...state.ingredients[index_remove].quantity--
         ],
-        totalPrice: state.totalPrice - state.ingredients[index].price
+        totalPrice: state.totalPrice - state.ingredients[index_remove].price
     }
+    case actionTypes.SET_INGREDIENTS: 
+      return {
+        ...state,
+        ingredients: action.payload,
+        error: false
+      }
+    case actionTypes.SET_INGREDIENTS_ERROR: 
+      return {
+        ...state,
+        error: true
+      }
     default:
      return state
   } 

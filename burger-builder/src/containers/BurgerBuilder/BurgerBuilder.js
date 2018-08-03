@@ -12,20 +12,12 @@ import { connect } from 'react-redux';
 
 class BurgerBuilder extends Component {
   state = {
-    purchasing: false,
-    loading: false,
-    error: false
+    purchasing: false
   }
 
-  // componentDidMount () {
-  //   axios.get('https://burger-builder-300ea.firebaseio.com/ingredients.json')
-  //   .then(response => {
-  //     this.setState({ingredients: response.data})
-  //   })
-  //   .catch(err => {
-  //     this.setState({error: true})
-  //   })
-  // }
+  componentDidMount () {
+    this.props.getIngredients();
+  }
 
 
     purchasingHandler = () => {
@@ -37,24 +29,12 @@ class BurgerBuilder extends Component {
     }
 
     continuePurchaseHandler = () => {
-    let queryParams = []
-    for(let i = 0; i < this.state.ingredients.length; i++){
-      for(let j in this.state.ingredients[i]){
-        queryParams.push(encodeURIComponent(j) + '=' + encodeURIComponent(this.state.ingredients[i][j]))
-      }
-    }
-      let queryString = queryParams.join('&')
-
-     this.props.history.push({
-      pathname: '/checkout',
-      search: '?' + queryString
-     })
-     
+     this.props.history.push('/checkout')
     }
 
 	render () {
     let orderSummary = null;
-    let burger = this.state.error ? <p style={{width: '100%', textAlign: 'center'}}>Ingredients can't be Loaded!</p> : <Spinner />
+    let burger = this.props.error ? <p style={{width: '100%', textAlign: 'center'}}>Ingredients can't be Loaded!</p> : <Spinner />
     if(this.props.ingredients){
      burger = (
       <div>
@@ -71,11 +51,7 @@ class BurgerBuilder extends Component {
                           cancel={this.cancelPurchaseHandler} 
                           ingredients={this.props.ingredients}/>
     }
-    if(this.state.loading) {
-      orderSummary = <Spinner />
-    }
-    
-
+   
 		return (
 				<div>
           <Modal show={this.state.purchasing} 
@@ -91,14 +67,16 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
   return {
     ingredients: state.ingredients,
-    price: state.totalPrice
+    price: state.totalPrice,
+    error: state.error
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     addIngredientHandler: (ingName) => dispatch(ingredientActions.addIngredient(ingName)),
-    removeIngredientHandler: (ingName) => dispatch(ingredientActions.removeIngredient(ingName))
+    removeIngredientHandler: (ingName) => dispatch(ingredientActions.removeIngredient(ingName)),
+    getIngredients: () => dispatch(ingredientActions.getIngredients())
   }
 }
 
