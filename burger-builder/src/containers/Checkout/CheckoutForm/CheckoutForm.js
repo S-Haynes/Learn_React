@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './CheckoutForm.css';
 import axios from '../../../axios-orders';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
+import * as actions from '../../../store/actions/orders';
 
 class CheckoutForm extends Component {
 
@@ -102,16 +103,13 @@ class CheckoutForm extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-    console.log(this.props.ingredients)
-    this.setState({loading: true})
       let ingredientsObj = null
       const formData = {};
       for (let key in this.state.orderForm) {
         formData[key] = this.state.orderForm[key].value
       }
-    setTimeout(() => {
-        const ingredients = [...this.props.ingredients]
-        const mappedIngredients = ingredients.map(ingredient => {
+      const ingredients = [...this.props.ingredients];
+      const mappedIngredients = ingredients.map(ingredient => {
         return {[ingredient.type]: ingredient.quantity}
       })
       
@@ -123,13 +121,8 @@ class CheckoutForm extends Component {
         orderData: formData
         }
 
-      axios.post('/orders.json', order)
-        .then(res => 
-          {this.setState({loading: false});
-          this.props.history.push('/')
-      })
-        .catch(err => this.setState({loading: false}))
-     }, 2000) 
+      this.props.initOrder(order);
+     
   }
 
   inputChangedHandler = (e, inputIdentifier) => {
@@ -159,7 +152,7 @@ class CheckoutForm extends Component {
   }
 
   render () {
-
+    let redirect = null;
     const formElementsArray = [];
     for(let key in this.state.orderForm) {
       formElementsArray.push({
@@ -187,10 +180,18 @@ class CheckoutForm extends Component {
     if(this.state.loading){
       form = <Spinner />
     }
+
+    if(this.props.purchased) {
+      redirect = <Redirect to="/" />
+    }
     return (
-      <div className={classes.CheckoutForm}>
-      <h3>Enter your Contact Info</h3>
-      {form}   
+      <div>
+        {redirect}
+        <div className={classes.CheckoutForm}>
+        <h3>Enter your Contact Info</h3>
+        {form}   
+      </div>
+      
       </div>
     )
   }
@@ -198,9 +199,30 @@ class CheckoutForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice
+    ingredients: state.ingredients.ingredients,
+    price: state.ingredients.totalPrice,
+    purchased: state.orders.purchased
   }
 }
 
-export default connect(mapStateToProps)(withRouter(CheckoutForm));
+const mapDispatchToProps = dispatch => {
+  return {
+    initOrder: (order) => dispatch(actions.placeOrderInit(order))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CheckoutForm));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

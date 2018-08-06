@@ -21,7 +21,7 @@ class Checkout extends Component {
         continue={this.continuePurchaseHandler} 
         cancel={this.cancelPurchaseHandler} 
         ingredients={this.props.ingredients}/>
-        <Route path={this.props.match.path + "/contact-form"} render={() => (<CheckoutForm ingredients={this.props.ingredients} />)} />
+        <Route path={this.props.match.path + "/contact-form"} component={CheckoutForm}/>
       </div>
      
     )
@@ -30,7 +30,7 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients
+    ingredients: state.ingredients.ingredients
   }
 }
 
