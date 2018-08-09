@@ -1,12 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const keys = require("./keys/keys");
+const keys = require("./config/keys");
+const userRoutes = require("./routes/api/users");
+const postRoutes = require("./routes/api/posts");
+const profileRoutes = require("./routes/api/profile");
 
 // initialize app
 const app = express();
 
-//establish mongoDB connection
+// establish mongoDB connection
 const db = keys.mongoURI;
 mongoose
   .connect(
@@ -19,6 +22,11 @@ mongoose
   .catch(err => {
     console.log(err);
   });
+
+// use routes
+app.use("/api/users", userRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/posts", postRoutes);
 
 // test route
 app.get("/", (req, res) => {
