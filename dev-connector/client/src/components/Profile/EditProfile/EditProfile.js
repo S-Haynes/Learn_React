@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import TextFieldGroup from "../../Input/TextFieldGroup/TextFieldGroup";
 import TextAreaFieldGroup from "../../Input/TextAreaFieldGroup/TextAreaFieldGroup";
@@ -214,6 +215,9 @@ class CreateProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
+              <Link to="/dashboard" className="btn btn-light">
+                Go Back
+              </Link>
               <h1 className="text-center display-4">Edit Profile</h1>
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={e => this.onSubmitHandler(e)}>

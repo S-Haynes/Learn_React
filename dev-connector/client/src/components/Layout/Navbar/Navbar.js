@@ -12,6 +12,7 @@ class Navbar extends Component {
     this.props.clearCurrentProfile();
     this.props.logoutUser(this.props.history);
   };
+
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
