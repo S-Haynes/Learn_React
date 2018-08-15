@@ -146,7 +146,7 @@ router.post(
   }
 );
 
-// route  - DELETE api/posts/like/:post_id
+// route  - DELETE api/posts/unlike/:post_id
 // desc   - Remove like from post
 // access - Private
 router.delete(
